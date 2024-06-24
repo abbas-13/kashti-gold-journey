@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
 import "./globals.css";
-import { Navbar } from "./Components/Navbar";
+
 import Brooklyn from "@next/font/local";
 
 const brooklyn = Brooklyn({
@@ -26,7 +27,11 @@ const brooklyn = Brooklyn({
   variable: "--font-brooklyn",
 });
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  weight: ["300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Kashti",
@@ -40,11 +45,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${brooklyn.variable} font-sansinter.className`}>
-        <div className="h-full w-full">
-          <Navbar />
-          {children}
-        </div>
+      <body className={`${brooklyn.variable} ${inter.variable}`}>
+        <div className="bg-[#f9f9f9]">{children}</div>
       </body>
     </html>
   );
