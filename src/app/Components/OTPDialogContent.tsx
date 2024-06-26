@@ -1,11 +1,11 @@
-import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useRef, useState, KeyboardEvent } from "react";
+import { useEffect, useRef, useState, KeyboardEvent, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import Security from "../../../public/lock.png";
 import Edit from "../../../public/edit.png";
+import { CustomButton } from "./CustomButton";
+import { Lock } from "@/Icons/Lock";
 
 interface OTPInputProps {
   length?: number;
@@ -24,6 +24,7 @@ export const OTPDialogContent = ({
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const router = useRouter();
 
+  console.log({ otp });
   const maskedPhoneNumber =
     phoneNumber && `${phoneNumber.slice(0, 4)}XXX${phoneNumber.slice(-3)}`;
 
@@ -73,16 +74,14 @@ export const OTPDialogContent = ({
     }
 
     const newOtp = [...otp];
-    // allow only one input
+
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
 
-    // submit trigger
     const combinedOtp = newOtp.join("");
 
     if (combinedOtp.length === length) onOtpSubmit(combinedOtp);
 
-    // Move to next input if current field is filled
     if (value && index < length - 1 && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
@@ -106,37 +105,50 @@ export const OTPDialogContent = ({
       index > 0 &&
       inputRefs.current[index - 1]
     ) {
-      // Move focus to the previous input field on backspace
       inputRefs.current[index - 1].focus();
     }
   };
 
-  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: React.SyntheticEvent<HTMLFormElement | HTMLButtonElement>
+  ) => {
     event.preventDefault();
     router.push("/AddressDetails");
   };
 
+  const isOtpComplete = useMemo(
+    () => otp.every((digit) => digit !== ""),
+    [otp]
+  );
+
   return (
     <div className="h-full w-full flex flex-col gap-4 rounded-lg">
       <form onSubmit={handleSubmit} className="h-full w-full flex flex-col">
-        <label className="w-full text-center text-2xl font-medium tracking-wide text-[#1D2939]">
+        <label className="w-full text-center text-xl md:text-2xl font-semibold md:font-medium md:tracking-wide text-[#1D2939]">
           OTP Verification
         </label>
-        <label className="w-full text-sm text-[#1D2939] flex my-4 font-light items-center text-center">
-          We have sent the 4-digit OTP to{" "}
-          <p className="font-medium text-sm ml-1">+91-{maskedPhoneNumber}</p>
-          <Image
-            src={Edit}
-            alt="edit icon"
-            className="h-4 w-4 ml-1 cursor-pointer"
-          />
-        </label>
+        <div className="w-full flex flex-col gap-2 md:gap-0 md:flex-row my-4 md:justify-center items-center">
+          <label className="text-xs md:text-sm text-[#1D2939] font-normal md:font-light items-center text-center">
+            We have sent the 4-digit OTP to
+          </label>
+          <div className="flex mt-2 md:mt-0">
+            <p className="font-medium text-xs md:text-sm md:ml-1">
+              +91-{maskedPhoneNumber}
+            </p>
+            <Image
+              src={Edit}
+              alt="edit icon"
+              className="h-3 w-3 md:h-4 md:w-4 ml-1 cursor-pointer"
+            />
+          </div>
+        </div>
         <Box className="flex gap-3 justify-center">
           {otp.map((value, index) => {
             return (
               <input
                 key={index}
                 type="text"
+                required
                 ref={(input) => {
                   if (input) {
                     inputRefs.current[index] = input;
@@ -146,7 +158,11 @@ export const OTPDialogContent = ({
                 onChange={(e) => handleChange(index, e)}
                 onClick={() => handleClick(index)}
                 onKeyDown={(event) => handleKeyDown(index, event)}
-                className="w-20 text-center font-medium text-xl h-14 border rounded border-[#2a3485] p-2"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                min={1}
+                max={1}
+                className="w-16 h-12 md:w-20 md:h-14 text-center font-medium text-xl border rounded border-[#2a3485] p-2"
               />
             );
           })}
@@ -159,27 +175,24 @@ export const OTPDialogContent = ({
         ) : (
           <p
             onClick={resetTimer}
-            className="text-[#f47D20] w-full text-sm my-4 text-start cursor-pointer"
+            className="text-[#f47D20] w-full font-semibold md:font-normal text-sm my-4 text-start cursor-pointer"
           >
             Resend OTP
           </p>
         )}
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            fontFamily: "Inter, sans-serif",
-            color: "white",
-            bgcolor: "#283487",
-          }}
-        >
-          Verify OTP
-        </Button>
+        <div className="w-full flex justify-center">
+          <CustomButton
+            onClick={handleSubmit}
+            label="Verify OTP"
+            classes="w-[100%]"
+            disabled={!isOtpComplete}
+          />
+        </div>
       </form>
 
-      <div className="flex items-center gap-3 ">
-        <Image src={Security} alt="lock" className="w-[5%]" />
-        <p className="text-[#475467] text-xs">
+      <div className="flex items-center gap-3 md:gap-3">
+        <Lock />
+        <p className="w-full text-xs md:text-md col-span-5 text-[#475647] tracking-wide leading-[1.3rem]">
           Your data’s safety is our top priority. It is secured by cutting-edge
           encryption and privacy protocols.
         </p>

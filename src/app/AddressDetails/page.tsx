@@ -12,6 +12,7 @@ import { Appshell } from "../Components/Appshell";
 import { Stepper, steps } from "../Components/Stepper";
 
 import { useRouter } from "next/navigation";
+import { CustomButton } from "../Components/CustomButton";
 
 export default function AddressDetails() {
   interface FormInput {
@@ -48,7 +49,9 @@ export default function AddressDetails() {
     }
   };
 
-  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: React.SyntheticEvent<HTMLFormElement | HTMLButtonElement>
+  ) => {
     event.preventDefault();
     router.push("/LoanDetails");
   };
@@ -68,8 +71,8 @@ export default function AddressDetails() {
         <div>
           {isMobile ? (
             <>
-              <p className="my-2">
-                {steps[2].title} {3}/{steps.length}
+              <p className="my-2 font-semibold text-sm">
+                {steps[2].title} ({3}/{steps.length})
               </p>
               <LinearProgress
                 variant="determinate"
@@ -86,12 +89,12 @@ export default function AddressDetails() {
           <div className="w-full flex justify-center">
             <form
               onSubmit={handleSubmit}
-              className="w-full md:w-2/3 gap-2 p-4 md:p-0 my-4 text-[#1D2939] flex flex-col"
+              className="w-full md:w-2/3 gap-2  my-4 text-[#1D2939] flex flex-col"
             >
-              <p className="text-xl md:text-md font-medium">
+              <p className="text-xl md:text-md font-semibold mt-2 md:mt-0 md:font-medium">
                 Communication Address
               </p>
-              <p className="text-md md:text-sm">
+              <p className="text-md md:mb-0 mb-4 md:text-sm">
                 Please enter communication address
               </p>
               <label className="text-md md:text-sm">Address Line 1*</label>
@@ -101,7 +104,7 @@ export default function AddressDetails() {
                 value={formInput.address}
                 onChange={handleChange}
               />
-              <div className="flex flex-col md:flex-row gap-4 mb-4">
+              <div className="flex flex-col md:flex-row gap-4 mt-2 md:mt-0 mb-4">
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between">
                     <label className="text-md md:text-sm">Pincode*</label>
@@ -141,19 +144,12 @@ export default function AddressDetails() {
                 </div>
               </div>
               <div className="w-full flex justify-center">
-                <Button
-                  className="w-1/3"
-                  variant="contained"
-                  disableElevation
+                <CustomButton
+                  onClick={handleSubmit}
                   disabled={!isFormValid}
-                  sx={{
-                    bgcolor: "#283487",
-                    color: "white",
-                  }}
-                  type="submit"
-                >
-                  Continue
-                </Button>
+                  classes="md:w-1/2 w-full"
+                  label="Continue"
+                />
               </div>
             </form>
           </div>

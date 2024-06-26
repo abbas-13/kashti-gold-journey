@@ -1,7 +1,12 @@
-export const OpaqueLogo = () => (
+interface OpaqueLogoProps {
+  height: string;
+  width: string;
+}
+
+export const OpaqueLogo = ({ height, width }: OpaqueLogoProps) => (
   <svg
-    width="93"
-    height="140"
+    width={width}
+    height={height}
     viewBox="0 0 93 140"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

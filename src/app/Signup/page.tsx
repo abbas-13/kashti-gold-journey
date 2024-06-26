@@ -13,6 +13,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Dialog } from "../Components/Dialog";
 import { Appshell } from "@/app/Components/Appshell";
 import { Lock } from "@/Icons/Lock";
+import { CustomButton } from "../Components/CustomButton";
 
 export default function Signup() {
   interface FormData {
@@ -62,8 +63,10 @@ export default function Signup() {
   return (
     <>
       <Appshell>
-        <div className="flex flex-col h-full md:h-auto p-4 py-8 md:items-center md:pt-12 md:pb-8 gap-4 ">
-          <p className="md:hidden font-medium text-2xl">Gold Loan</p>
+        <div className="flex flex-col h-full md:h-auto py-2 md:items-center md:pt-12 md:pb-8 gap-4 ">
+          <p className="md:hidden font-semibold md:font-medium text-xl md:text-2xl">
+            Gold Loan
+          </p>
 
           <form
             onSubmit={handleForm}
@@ -122,42 +125,35 @@ export default function Signup() {
                     "& .MuiSvgIcon-root": { fontSize: 20, color: "#344054" },
                   }}
                 />
-                <label className="text-[#5c5757] text-sm w-full">
+                <label className="text-[#5c5757] text-xs md:text-sm md:font-light w-full">
                   By submitting this form, you have read and agreed to
                   the&nbsp;&nbsp;
-                  <a href="#" className="text-[#2A3485]">
+                  <a href="#" className="font-semibold text-[#2A3485]">
                     Credit Report
                   </a>
                   ,&nbsp;&nbsp;
-                  <a href="#" className="text-[#2A3485]">
+                  <a href="#" className="font-semibold text-[#2A3485]">
                     Terms of Use&nbsp;&nbsp;
                   </a>
                   and&nbsp;&nbsp;
-                  <a href="#" className="text-[#2A3485]">
+                  <a href="#" className="font-semibold text-[#2A3485]">
                     Privacy Policy
                   </a>
                 </label>
               </div>
               <div className="w-full flex justify-center">
-                <Button
-                  variant="contained"
-                  type="submit"
+                <CustomButton
                   onClick={handleOpen}
                   disabled={!isFormValid}
-                  sx={{
-                    bgcolor: "#283487",
-                  }}
-                >
-                  Verify and Proceed
-                </Button>
+                  classes="md:w-1/2 w-full"
+                  label="Verify and Proceed"
+                />
               </div>
             </div>
           </form>
-          <div className="text-sm flex items-center gap-2 md:gap-1">
-            <div className="h-5 flex items-center justify-center rounded-full">
-              <Lock />
-            </div>
-            <p className="w-full text-[#475647] tracking-wide leading-[1.3rem]">
+          <div className="flex items-center gap-3 md:gap-1">
+            <Lock />
+            <p className="w-full text-xs md:text-md col-span-5 text-[#475647] tracking-wide leading-[1.3rem]">
               Your data’s safety is our top priority. It is secured by
               cutting-edge encryption and privacy protocols.
             </p>

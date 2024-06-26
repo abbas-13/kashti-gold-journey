@@ -1,15 +1,13 @@
 "use client";
 
-import React, { SyntheticEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   TextField,
-  Button,
   MenuItem,
   Slider,
   InputAdornment,
   SliderThumb,
   SelectChangeEvent,
-  SliderProps,
   useMediaQuery,
   LinearProgress,
 } from "@mui/material";
@@ -17,9 +15,9 @@ import { styled } from "@mui/material/styles";
 
 import { Appshell } from "../Components/Appshell";
 import { Stepper, steps } from "../Components/Stepper";
-import Logo from "../../../public/logo.png";
-import Image from "next/image";
 import { Lock } from "@/Icons/Lock";
+import { Logo } from "@/Icons/Logo";
+import { CustomButton } from "../Components/CustomButton";
 
 const menuItems = ["1 gram", "1.5 gram", "2 gram", "3 gram"];
 
@@ -36,14 +34,12 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
     backgroundColor: "#D0D5DD",
   },
   "& .MuiSlider-thumb": {
-    color: "#fff",
     width: 24,
     height: 24,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ffffff",
-    backgroundImage: `url(${Logo})`,
     borderRadius: "50%",
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
     border: `2px solid #283487`,
@@ -52,6 +48,19 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
     },
   },
 }));
+
+interface CustomSliderThumbProps extends React.HTMLAttributes<unknown> {}
+
+const CustomSliderThumb = (props: CustomSliderThumbProps) => {
+  const { children, ...other } = props;
+
+  return (
+    <SliderThumb {...other}>
+      {children}
+      <Logo height={12} width={10} />
+    </SliderThumb>
+  );
+};
 
 export default function AddressDetails() {
   const [formInput, setFormInput] = useState({
@@ -74,29 +83,19 @@ export default function AddressDetails() {
     }));
   };
 
-  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: React.SyntheticEvent<HTMLFormElement | HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
-
-  interface CustomSliderThumbProps extends React.HTMLAttributes<unknown> {}
-
-  function CustomSliderThumb(props: CustomSliderThumbProps) {
-    const { children, ...other } = props;
-    return (
-      <SliderThumb {...other}>
-        {children}
-        <Image src={Logo} alt="logo" height={12} />
-      </SliderThumb>
-    );
-  }
 
   return (
     <>
       <Appshell>
         {isMobile ? (
           <>
-            <p className="my-2">
-              {steps[3].title} {4}/{steps.length}
+            <p className="my-2 font-semibold text-sm">
+              {steps[3].title} ({4}/{steps.length})
             </p>
             <LinearProgress
               variant="determinate"
@@ -108,14 +107,16 @@ export default function AddressDetails() {
             />
           </>
         ) : (
-          <Stepper activeIndex={4} />
+          <Stepper activeIndex={3} />
         )}
-        <div className="w-full p-4 flex flex-col py-8 items-center">
+        <div className="w-full md:p flex flex-col py-8 items-center">
           <form
             onSubmit={handleSubmit}
             className="w-full md:p-0 md:w-2/3 flex text-[#1D2939] mb-4 flex-col gap-2"
           >
-            <p className="font-semibold text-xl md:text-md mb-2">Loan Amount</p>
+            <p className="font-semibold md:font-medium text-xl md:text-md mb-2">
+              Loan Amount
+            </p>
             <label className="text-md md:text-sm">Select Gold Weight</label>
             <TextField
               select
@@ -177,24 +178,17 @@ export default function AddressDetails() {
                 </label>
               </div>
             </div>
-            <div className="w-full flex justify-center">
-              <Button
-                className="w-1/3"
-                variant="contained"
-                sx={{
-                  bgcolor: "#283487",
-                }}
-                type="submit"
-              >
-                Submit
-              </Button>
+            <div className="w-full mt-4 md:mt-0 flex justify-center">
+              <CustomButton
+                onClick={handleSubmit}
+                label="Submit"
+                classes="w-full md:w-1/2"
+              />
             </div>
           </form>
-          <div className="text-sm flex gap-1 text-[#475647]">
-            <div className="h-5 flex items-center justify-center rounded-full">
-              <Lock />
-            </div>
-            <p className="w-full">
+          <div className="flex items-center gap-3 md:gap-1">
+            <Lock />
+            <p className="w-full text-xs md:text-md col-span-5 text-[#475647] tracking-wide leading-[1.3rem]">
               Your data’s safety is our top priority. It is secured by
               cutting-edge encryption and privacy protocols.
             </p>
