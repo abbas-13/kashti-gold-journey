@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { StyledEngineProvider } from "@mui/material/styles";
 
 import "./globals.css";
 
@@ -46,7 +47,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${brooklyn.variable} ${inter.variable}`}>
-        <div className="bg-[#f9f9f9]">{children}</div>
+        <link rel="icon" href="/favicon.ico" />
+        <StyledEngineProvider injectFirst>
+          <div className="bg-[#f9f9f9]" id="root">
+            {children}
+          </div>
+        </StyledEngineProvider>
       </body>
     </html>
   );

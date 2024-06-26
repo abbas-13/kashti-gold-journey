@@ -15,7 +15,6 @@ import { BasicDetails } from "../../Icons/BasicDetails";
 import { IncomeDetails } from "../../Icons/IncomeDetails";
 import { EmploymentDetails } from "../../Icons/EmploymentDetails";
 import { KYCDetails } from "../../Icons/KYCDetails";
-import { MobileProgress } from "./MobileProgress";
 
 export const steps = [
   { title: "Basic Details" },
@@ -48,7 +47,7 @@ const StepIcon = ({ src, color, active, completed }: IconProps) => {
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       }
     })
-    .join("");
+    .join("") as keyof typeof iconMap;
 
   const BaseIcon = iconMap[iconName];
 
@@ -64,7 +63,7 @@ const StepIcon = ({ src, color, active, completed }: IconProps) => {
 
   return (
     <div className={appliedClasses}>
-      <BaseIcon />
+      <BaseIcon color={active || completed ? "white" : "black"} />
     </div>
   );
 };
@@ -114,6 +113,12 @@ export const Stepper = ({ activeIndex }: StepperProps) => {
         {steps.map((step, index) => (
           <Step key={step.title}>
             <StepLabel
+              sx={{
+                "& .Mui-active": {
+                  fontWeight: "600 !important",
+                  color: "#213485 !important",
+                },
+              }}
               StepIconComponent={() => {
                 return (
                   <StepIcon
